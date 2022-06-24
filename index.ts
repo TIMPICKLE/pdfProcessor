@@ -1,6 +1,7 @@
 import { degrees, PDFDocument,  Rotation } from 'pdf-lib';
 import download from 'downloadjs';
 
+// start
 export class PDFProcessor {
     //状态变量 电子签名canvas绘制图片配置 单位统一为px
     static ImageHight: number = 40;
@@ -50,7 +51,7 @@ export class PDFProcessor {
         });
     }
 
-    //文件转base64字符串，并且执行回调
+    //文件转base64字符串 并且执行回调o 
     static getBase64FromFile(f: File, callback: (f: string) => void): void {
         const reader = new FileReader();
         reader.addEventListener('load', () => callback(reader.result.toString()));
