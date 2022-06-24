@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "downloadjs": "^1.4.7",
+    "pdf-lib": "^1.17.1"
+  }
+}
