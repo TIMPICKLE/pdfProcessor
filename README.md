@@ -1,9 +1,22 @@
 # pdfProcessor
 
-## hi there, Recent work has been on PDF file processing, integrating various packages (pdF.js, PDF-lib, downlaod.js...). And write and copy various utility functions (arrayBufferToFile, checkFileType, ArrayBufferToBase64...) , familiar with a variety of commonly used interfaces (Canvas, blob...)
+### Its a pdf tool to help you add digital signature. And its version is 1.0.1 So you cant enter any variable, All the variables are hidden eg.  
+```
+    static ImageHight: number = 40;
+    static ImageWidth: number = 80;
+    static ImageOpacity: number = 0.55;
+    static originPDFRotateDegrees:number ;
+    static ImageRotateDegrees: Rotation;
+    static cycleInterval: number = 10;
+    static ImageMarginToBorder: number = 20;
+```
+but in future, i will rebuild it. spilt those const variables, and then, you can use your personal configuration. 
+In a word, this a bad version, i will maintain this project continuously.
 
-## After graduation, I just did some research on drawing canvas layer on PDF, and then I started to deal with PDF. Instead, do something meaningful.
+In version 1.0.1, i add serval tool function:
 
-## "The technology is open source, the business is proprietary."
-
-## Abstract the code based on the existing business, package into a tool class, and then integrate some general PDF file processing functions, mainly for PDF to add digital signature this function service. Finally, package to NPM and open source to Github.
+🔽
+1. getImageType( base64String:string ) : string{}
+2. static bufToFile(buf, filename) {}
+3. static getBase64FromFile(f: File, callback: (f: string) => void): void {})
+4. static addDigitalSignature(pdfFile: File, imageStringArray: Array<string>) {}
