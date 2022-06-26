@@ -10,10 +10,10 @@
     static cycleInterval: number = 10;
     static ImageMarginToBorder: number = 20;
 ```
-but in future, i will rebuild it. spilt those const variables, and then, you can use your personal configuration. 
+but in future, i will rebuild it. split those const variables, and then, you can use your personal configuration. 
 In a word, this a bad version, i will maintain this project continuously.
 
-In version 1.0.1, i add serval tool function:
+In version 1.0.1, i add several tool functions:
 
 🔽
 1. getImageType( base64String:string ) : string{}
