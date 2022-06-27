@@ -20,3 +20,9 @@ In version 1.0.1, i add several tool functions:
 2. static bufToFile(buf, filename) {}
 3. static getBase64FromFile(f: File, callback: (f: string) => void): void {})
 4. static addDigitalSignature(pdfFile: File, imageStringArray: Array<string>) {}
+5. static getLocation(location: DigitalSignatureLocation, pdfFile: File) {}
+6. static addSingleDigitalSignature(
+    pdfFile: File,
+    imageString: string,
+    location: DigitalSignatureLocation
+  ): Promise<ArrayBufferLike> {}
