@@ -12,14 +12,13 @@ export class PDFProcessor {
   static cycleInterval: number = 10;
   static ImageMarginToBorder: number = 20;
 
-  // pdf旋转角度对应
+  // pdf旋转角度对应 Lower right corner Lower left corner upper right corner lower right
   static rotationAngleMap = new Map([
     ["noRotationAngle", 0],
     ["90RotationAngle", 90],
     ["180RotationAngle", 180],
     ["270RotationAngle", 270],
   ]);
-  static thirdPartReportsService: any;
 
   // 获取电子签名（图片）类型
   static getImageType(base64String: string): string {
@@ -58,7 +57,30 @@ export class PDFProcessor {
     reader.readAsDataURL(f);
   }
 
-  static addDigitalSignature(pdfFile: File, imageStringArray: Array<string>) {
+  //获取文件的base64 不执行任何回掉
+  static getBase64WithNoCallback(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      let fileResult;
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        fileResult = reader.result;
+      };
+      reader.onerror = (error) => {
+        reject(error);
+      };
+      reader.onloadend = () => {
+        resolve(fileResult);
+      };
+    });
+  }
+
+  // 添加电子签名函数
+  // NIHAO TODO: 这边还需要继续抽离
+  static UIHaddDigitalSignature(
+    pdfFile: File,
+    imageStringArray: Array<string>
+  ): Promise<ArrayBufferLike> {
     const fileBytesAsPromise = pdfFile.arrayBuffer();
 
     const resultPDFArray = fileBytesAsPromise.then(
@@ -158,23 +180,108 @@ export class PDFProcessor {
     return resultPDFArray;
   }
 
-  static getBase64WithNoCallback(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      let fileResult ;
-      reader.readAsDataURL(file);
-      //开始转
-      reader.onload = () => {
-        fileResult = reader.result;
-      };
-      //转失败
-      reader.onerror = (error) => {
-        reject(error);
-      };
-      //结束 resolve
-      reader.onloadend = () => {
-        resolve(fileResult);
-      };
+  // 通过枚举来设置指定的位置
+  static getLocation(location: DigitalSignatureLocation, pdfFile: File) {
+    const fileBytesAsPromise = pdfFile.arrayBuffer();
+    // x y 计算
+    let locationObject = {
+      x: 0,
+      y: 0,
+    };
+    const resultLocationObject = fileBytesAsPromise.then(async (data) => {
+      const pdfDoc = await PDFDocument.load(data as unknown as ArrayBuffer);
+      const pages = await pdfDoc.getPages();
+
+      // 获取 宽高
+      const pdfHight = pages[0].getHeight();
+      const pdfWidth = pages[0].getWidth();
+
+      switch (location) {
+        case 0:
+          console.log("LowerRight");
+          locationObject.x = pdfWidth - this.ImageWidth * 1;
+          locationObject.y = this.ImageMarginToBorder;
+          break;
+        case 1:
+          console.log("LowerLeft");
+          locationObject.x = this.cycleInterval;
+          locationObject.y = this.ImageMarginToBorder;
+          break;
+        case 2:
+          console.log("upperRight");
+          locationObject.x = pdfWidth - this.ImageWidth * 1;
+          locationObject.y = pdfHight - this.ImageHight * 1;
+          break;
+        case 3:
+          console.log("upperLeft");
+          locationObject.x = pdfHight - this.ImageHight * 1;
+          locationObject.y = this.ImageMarginToBorder;
+          break;
+      }
+
+      return locationObject;
     });
+    return resultLocationObject;
+  }
+
+  // 添加单个电子签名  （一种添加电子签名的通用的方法）
+  static addSingleDigitalSignature(
+    pdfFile: File,
+    imageString: string,
+    location: DigitalSignatureLocation
+  ): Promise<ArrayBufferLike> {
+    const fileBytesAsPromise = pdfFile.arrayBuffer();
+
+    const resultPDFArray = fileBytesAsPromise.then(
+      async (data): Promise<ArrayBufferLike> => {
+        const pdfDoc = await PDFDocument.load(data as unknown as ArrayBuffer);
+        const pages = await pdfDoc.getPages();
+
+        //获取电子签名图片资源类型
+        const ImgSrcType = this.getImageType(imageString);
+        // 图片资源开辟内存
+        let DigitalSignalImg;
+
+        // 获取旋转角度
+        const PDFRotationAngle = pages[0].getRotation().angle;
+        // 同步图片和文档的旋转角度
+        this.ImageRotateDegrees = degrees(this.originPDFRotateDegrees);
+
+        // 获取 宽高 用于计算横板pdf的canvas绘制
+        const pdfHight = pages[0].getHeight();
+        const pdfWidth = pages[0].getWidth();
+
+        // 获取位置对象
+        const resultLocation = this.getLocation(location, pdfFile);
+
+        if (ImgSrcType === "JPG") {
+          DigitalSignalImg = await pdfDoc.embedJpg(imageString);
+        } else if (ImgSrcType === "PNG") {
+          DigitalSignalImg = await pdfDoc.embedPng(imageString);
+        } else {
+          console.log("图片格式既不是jpg也不是png");
+        }
+
+        if (PDFRotationAngle === this.rotationAngleMap.get("noRotationAngle")) {
+          for (let page = 0; page < pages.length; page++) {
+            pages[page].drawImage(DigitalSignalImg, {
+              x: (await resultLocation).x,
+              y: (await resultLocation).y,
+              width: this.ImageWidth,
+              height: this.ImageHight,
+              opacity: this.ImageOpacity,
+            });
+          }
+        } else {
+          console.log("不是A4格式");
+        }
+
+        const pdfBytes = await pdfDoc.save();
+        //download(pdfBytes, `utiltest`, 'application/pdf');
+        const arrayBuffer = pdfBytes.buffer;
+        return arrayBuffer;
+      }
+    );
+    return resultPDFArray;
   }
 }
