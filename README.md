@@ -16,7 +16,7 @@ In a word, this a bad version, i will maintain this project continuously.
 In version 1.0.1, i add several tool functions:
 
 🔽
-1. getImageType( base64String:string ) : string{}
+1. static getImageType( base64String:string ) : string{}
 2. static bufToFile(buf, filename) {}
 3. static getBase64FromFile(f: File, callback: (f: string) => void): void {})
 4. static addDigitalSignature(pdfFile: File, imageStringArray: Array<string>) {}
@@ -26,3 +26,4 @@ In version 1.0.1, i add several tool functions:
     imageString: string,
     location: DigitalSignatureLocation
   ): Promise<ArrayBufferLike> {}
+
