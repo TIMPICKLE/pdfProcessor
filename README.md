@@ -13,7 +13,7 @@
 but in future, i will rebuild it. split those const variables, and then, you can use your personal configuration. 
 In a word, this a bad version, i will maintain this project continuously.
 
-In version 1.0.1, i add several tool functions:
+now, its version 1.0.2. so i add another tool function to open pdf directly without downloading. so quick :)
 
 🔽
 1. static getImageType( base64String:string ) : string{}
@@ -26,4 +26,6 @@ In version 1.0.1, i add several tool functions:
     imageString: string,
     location: DigitalSignatureLocation
   ): Promise<ArrayBufferLike> {}
+  
+7.static viewPDFWithoutDownl(fileContent: string,fileType: string) {}
 
