@@ -27,5 +27,5 @@ now, its version 1.0.2. so i add another tool function to open pdf directly with
     location: DigitalSignatureLocation
   ): Promise<ArrayBufferLike> {}
   
-7.static viewPDFWithoutDownl(fileContent: string,fileType: string) {}
+7. static viewPDFWithoutDownl(fileContent: string,fileType: string) {}
 
