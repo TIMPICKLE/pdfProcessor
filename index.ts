@@ -56,9 +56,26 @@ export class PDFProcessor {
     reader.addEventListener("load", () => callback(reader.result.toString()));
     reader.readAsDataURL(f);
   }
+  
+  //直接打开pdf 不下载
+  // 交互方式：直接通过浏览器tag打开 不再下载
+  // 逻辑：Base64 -> utf8 DtatArray ->  Unicode 编码 -> Blob -> url打开Blob
+  // 参数 eg. String Base64 , "application.pdf"
+  static viewPDFWithoutDownl(fileContent: string,fileType: string) {
+    const contentTemp = fileContent.split(',');
+    const content = contentTemp[1];
+    const bytes = window.atob(content);
+    const dataArray = new Uint8Array(bytes.length);
+    for (let i = 0; i < bytes.length; i++) {
+        dataArray[i] = bytes.charCodeAt(i);
+     }
+    const blob = new Blob([dataArray], { type: fileType });
+    const url = window.URL.createObjectURL(blob);
+    open(url);
+    }
 
   //获取文件的base64 不执行任何回掉
-  static getBase64WithNoCallback(file) {
+  static getBase64WithoutCallback(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       let fileResult;
