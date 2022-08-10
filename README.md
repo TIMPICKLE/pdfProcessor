@@ -29,3 +29,5 @@ now, its version 1.0.2. so i add another tool function to open pdf directly with
   
 7. static viewPDFWithoutDownl(fileContent: string,fileType: string) {}
 
+10/8/2022
+some new ideas! maybe i can privade two ways to import the nessary varables, it allows user load their own .ts file or just use common args.
