@@ -3,6 +3,19 @@ import download from "downloadjs";
 
 // start
 export class PDFProcessor {
+  // 常见的文件用JS转Base64之后的data类型
+  static txt = 'data:text/plain;base64';
+  static doc = 'data: application / msword; base64';
+  static docx =
+        'data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64';
+  static xls = 'datadata:application/vnd.ms-excel;base64';
+  static xlsx = ' data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,';
+  static pdf = 'data:application/pdf;base64';
+  static pptx =
+        'data:application/vnd.openxmlformats-officedocument.presentationml.presentation;base64,';
+  static ppt = 'data:application/vnd.ms-powerpoint;base64';
+  
+  
   //状态变量 电子签名canvas绘制图片配置 单位统一为px
   static ImageHight: number = 40;
   static ImageWidth: number = 80;
