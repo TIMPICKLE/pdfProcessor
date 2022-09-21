@@ -55,6 +55,12 @@ export class PDFProcessor {
 
     return res;
   }
+  
+   // 下载文件 download(data, strFileName, strMimeType);
+   // MimeType请从PDFProcessor静态变量中选择
+   downloadFile(data: any, strFileName: string, strMimeType: string) {
+        download(data, strFileName, strMimeType);
+    }
 
   // ArrayBuffer转换为File文件
   static bufToFile(buf, filename) {
