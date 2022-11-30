@@ -31,3 +31,6 @@ now, its version 1.0.2. so i add another tool function to open pdf directly with
 
 10/8/2022
 some new ideas! maybe i can privade two ways to import the nessary varables, it allows user load their own .ts file or just use common args.
+
+30/11/2022
+fuck. i am learning TypeScript. try to abstract the types. wait serval days!
